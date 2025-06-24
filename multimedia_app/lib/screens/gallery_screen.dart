@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import '../models/gallery_item.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({Key? key}) : super(key: key);
@@ -11,49 +10,19 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  // List untuk gallery
-  final List<GalleryItem> galleryItems = [
-    GalleryItem(
-      imageUrl: 'assets/images/gallery1.jpg',
-      title: 'Kegiatan 1',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery2.jpg',
-      title: 'Kegiatan 2',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery3.jpg',
-      title: 'Kegiatan 3',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery4.jpg',
-      title: 'Kegiatan 4',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery5.jpg',
-      title: 'Kegiatan 5',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery6.jpeg',
-      title: 'Kegiatan 6',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery7.jpg',
-      title: 'Kegiatan 7',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery8.jpg',
-      title: 'Kegiatan 8',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery9.jpg',
-      title: 'Kegiatan 9',
-    ),
-    GalleryItem(
-      imageUrl: 'assets/images/gallery10.jpg',
-      title: 'Kegiatan 10',
-    ),
-    // Tambahkan lebih banyak item sesuai kebutuhan
+  // List untuk gallery - hanya image path
+  final List<String> galleryImages = [
+    'assets/images/gallery1.jpg',
+    'assets/images/gallery2.jpg',
+    'assets/images/gallery3.jpg',
+    'assets/images/gallery4.jpg',
+    'assets/images/gallery5.jpg',
+    'assets/images/gallery6.jpeg',
+    'assets/images/gallery7.jpg',
+    'assets/images/gallery8.jpg',
+    'assets/images/gallery9.jpg',
+    'assets/images/gallery10.jpg',
+    // Tambahkan lebih banyak gambar sesuai kebutuhan
   ];
 
   void _openImageZoomView(BuildContext context, int index) {
@@ -61,7 +30,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => ImageZoomView(
-          galleryItems: galleryItems,
+          galleryImages: galleryImages,
           initialIndex: index,
         ),
       ),
@@ -175,20 +144,20 @@ class _GalleryScreenState extends State<GalleryScreen> {
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.85,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.0, // Square aspect ratio
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final item = galleryItems[index];
+                    final imagePath = galleryImages[index];
                     return _buildGalleryCard(
-                      item: item,
+                      imagePath: imagePath,
                       index: index,
                       onTap: () => _openImageZoomView(context, index),
                     );
                   },
-                  childCount: galleryItems.length,
+                  childCount: galleryImages.length,
                 ),
               ),
             ),
@@ -204,158 +173,82 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   Widget _buildGalleryCard({
-    required GalleryItem item,
+    required String imagePath,
     required int index,
     required VoidCallback onTap,
   }) {
-    const accentColor = Color(0xFF1E88E5);
-    
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 15,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          onTap: onTap,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image Section
-              Expanded(
-                flex: 3,
-                child: Hero(
-                  tag: 'gallery_${index}',
-                  child: Container(
-                    width: double.infinity,
+        borderRadius: BorderRadius.circular(16),
+        child: Hero(
+          tag: 'gallery_${index}',
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Main Image
+                  Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey[400],
+                          size: 40,
+                        ),
+                      );
+                    },
+                  ),
+                  
+                  // Hover overlay effect
+                  Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                         colors: [
-                          accentColor.withOpacity(0.1),
-                          accentColor.withOpacity(0.05),
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.1),
                         ],
                       ),
                     ),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                          child: Image.asset(
-                            item.imageUrl,
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[200],
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  color: Colors.grey[400],
-                                  size: 40,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        // Overlay gradient
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.transparent,
-                                  Colors.black.withOpacity(0.3),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Zoom icon overlay
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(
-                              Icons.zoom_in_rounded,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ],
+                  ),
+                  
+                  // Zoom icon overlay
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Icon(
+                        Icons.fullscreen,
+                        color: Colors.white,
+                        size: 16,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-              
-              // Content Section
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        item.title,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2C3E50),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.visibility_rounded,
-                            size: 12,
-                            color: accentColor,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Lihat Detail',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: accentColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -365,12 +258,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
 // Widget untuk zoom gambar
 class ImageZoomView extends StatefulWidget {
-  final List<GalleryItem> galleryItems;
+  final List<String> galleryImages;
   final int initialIndex;
 
   const ImageZoomView({
     Key? key,
-    required this.galleryItems,
+    required this.galleryImages,
     required this.initialIndex,
   }) : super(key: key);
 
@@ -402,9 +295,9 @@ class _ImageZoomViewState extends State<ImageZoomView> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.galleryItems[_currentIndex].title,
-          style: const TextStyle(color: Colors.white),
+        title: const Text(
+          'Gallery MMB',
+          style: TextStyle(color: Colors.white),
         ),
         actions: [
           Container(
@@ -415,7 +308,7 @@ class _ImageZoomViewState extends State<ImageZoomView> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${_currentIndex + 1}/${widget.galleryItems.length}',
+              '${_currentIndex + 1}/${widget.galleryImages.length}',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
@@ -429,13 +322,13 @@ class _ImageZoomViewState extends State<ImageZoomView> {
         scrollPhysics: const BouncingScrollPhysics(),
         builder: (BuildContext context, int index) {
           return PhotoViewGalleryPageOptions(
-            imageProvider: AssetImage(widget.galleryItems[index].imageUrl),
+            imageProvider: AssetImage(widget.galleryImages[index]),
             initialScale: PhotoViewComputedScale.contained,
             minScale: PhotoViewComputedScale.contained * 0.8,
             maxScale: PhotoViewComputedScale.covered * 2,
           );
         },
-        itemCount: widget.galleryItems.length,
+        itemCount: widget.galleryImages.length,
         loadingBuilder: (context, event) => const Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
