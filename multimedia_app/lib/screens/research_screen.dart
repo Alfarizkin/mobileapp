@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import '../widgets/common_header.dart';
 
-class ResearchScreen extends StatefulWidget {
+class ResearchScreen extends StatelessWidget {
   const ResearchScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ResearchScreen> createState() => _ResearchScreenState();
-}
+  static const List<String> years = [
+    '2020',
+    '2021',
+    '2022',
+    '2023',
+    '2024'
+  ];
 
-class _ResearchScreenState extends State<ResearchScreen> {
-  final List<String> years = ['2020', '2021', '2022', '2023', '2024'];
-  int selectedYearIndex = 4; // Default to 2024 (latest)
-
-  final Map<String, List<Map<String, String>>> researchByYear = {
+  static const Map<String, List<Map<String, String>>> researchByYear = {
     '2020': [
       {
         'title': 'Quality Assessment of Digital Terrestrial Television Broadcast in Surabaya',
@@ -210,15 +210,18 @@ class _ResearchScreenState extends State<ResearchScreen> {
     ],
   };
 
-  final List<Color> categoryColors = [
-    const Color(0xFF1E88E5), // Blue
-    const Color(0xFF4CAF50), // Green
-    const Color(0xFFFF9800), // Orange
-    const Color(0xFF9C27B0), // Purple
-    const Color(0xFFE91E63), // Pink
-    const Color(0xFF00BCD4), // Cyan
-    const Color(0xFFFF5722), // Deep Orange
-    const Color(0xFF795548), // Brown
+  static const primaryColor = Color(0xFF0F2D52);
+  static const accentColor = Color(0xFF1E88E5);
+
+  static const List<Color> categoryColors = [
+    Color(0xFF1E88E5), // Blue
+    Color(0xFF4CAF50), // Green
+    Color(0xFFFF9800), // Orange
+    Color(0xFF9C27B0), // Purple
+    Color(0xFFE91E63), // Pink
+    Color(0xFF00BCD4), // Cyan
+    Color(0xFFFF5722), // Deep Orange
+    Color(0xFF795548), // Brown
   ];
 
   Color getCategoryColor(String category) {
@@ -227,261 +230,254 @@ class _ResearchScreenState extends State<ResearchScreen> {
         .map((item) => item['category']!)
         .toSet()
         .toList();
-    
+
     final index = categories.indexOf(category);
     return categoryColors[index % categoryColors.length];
   }
 
   @override
   Widget build(BuildContext context) {
-    String selectedYear = years[selectedYearIndex];
-    List<Map<String, String>> researchList = researchByYear[selectedYear] ?? [];
-    const primaryColor = Color(0xFF0F2D52);
-    const accentColor = Color(0xFF1E88E5);
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Reusable Header
-            const CommonHeader(
-              title: 'PROGRAM STUDI',
-              subtitle: 'TEKNOLOGI MULTIMEDIA DAN BROADCASTING',
-            ),
-            
-            // Content
-            Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  // Section Title
-                  SliverToBoxAdapter(
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+    return DefaultTabController(
+      length: years.length,
+      initialIndex: 0, // Mulai dari tahun terbaru (2024)
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8F9FA),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Reusable Header
+              const CommonHeader(
+                title: 'PROGRAM STUDI',
+                subtitle: 'TEKNOLOGI MULTIMEDIA DAN BROADCASTING',
+              ),
+              
+              // Section Title
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: accentColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.science_rounded,
+                            color: accentColor,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: accentColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.science_rounded,
-                                  color: accentColor,
-                                  size: 24,
+                              Text(
+                                'Penelitian Kami',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF2C3E50),
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              const Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Penelitian Kami',
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF2C3E50),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Inovasi dan riset untuk masa depan',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
+                              Text(
+                                'Inovasi dan riset untuk masa depan',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  
-                  // Year Selection
-                  SliverToBoxAdapter(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: List.generate(years.length, (index) {
-                          bool selected = index == selectedYearIndex;
-                          return Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedYearIndex = index;
-                                });
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: selected ? primaryColor : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  years[index],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: selected ? Colors.white : Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
-                  
-                  const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  
-                  // Research Count
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        '${researchList.length} Penelitian pada tahun $selectedYear',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[700],
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Modern TabBar dengan garis biru di bawah
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: TabBar(
+                      labelColor: accentColor,
+                      unselectedLabelColor: const Color(0xFF6B7280),
+                      indicator: const UnderlineTabIndicator(
+                        borderSide: BorderSide(
+                          color: accentColor,
+                          width: 3,
+                        ),
+                        insets: EdgeInsets.symmetric(horizontal: 20),
                       ),
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      unselectedLabelStyle: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                      dividerColor: Colors.transparent,
+                      overlayColor: MaterialStateProperty.all(
+                        accentColor.withOpacity(0.1),
+                      ),
+                      tabs: years.map((year) => Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(year),
+                      )).toList(),
                     ),
                   ),
-                  
-                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                  
-                  // Research List
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final research = researchList[index];
-                          final categoryColor = getCategoryColor(research['category']!);
-                          
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.08),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Category Header
-                                  Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: categoryColor.withOpacity(0.1),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: categoryColor.withOpacity(0.2),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Text(
-                                            research['category']!,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              color: categoryColor,
-                                            ),
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        Icon(
-                                          Icons.science_outlined,
-                                          size: 16,
-                                          color: categoryColor,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  
-                                  // Content
-                                  Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          research['title']!,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFF2C3E50),
-                                            height: 1.3,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          research['description']!,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[600],
-                                            height: 1.4,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        childCount: researchList.length,
-                      ),
-                    ),
-                  ),
-                  
-                  // Bottom padding
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 20),
+                ),
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // TabBarView with research content
+              Expanded(
+                child: TabBarView(
+                  children: years.map((year) => _buildResearchTab(year)).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResearchTab(String year) {
+    List<Map<String, String>> researchList = researchByYear[year] ?? [];
+    
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Research Count
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Text(
+              '${researchList.length} Penelitian pada tahun $year',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+              ),
+            ),
+          ),
+          
+          // Research List
+          ...researchList.map((research) {
+            final categoryColor = getCategoryColor(research['category']!);
+            
+            return Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category Header
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: categoryColor.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: categoryColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              research['category']!,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: categoryColor,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          Icon(
+                            Icons.science_outlined,
+                            size: 16,
+                            color: categoryColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Content
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            research['title']!,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2C3E50),
+                              height: 1.3,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            research['description']!,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+          
+          // Bottom padding
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }

@@ -149,12 +149,6 @@ class FasilitasScreen extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   // Handle tap - bisa navigate ke detail page
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Tapped on ${item['title']}'),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
                                 },
                                 child: Row(
                                   children: [
@@ -223,25 +217,6 @@ class FasilitasScreen extends StatelessWidget {
                                               ),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  size: 12,
-                                                  color: accentColor,
-                                                ),
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  'Lihat Detail',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: accentColor,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
                                             ),
                                           ],
                                         ),

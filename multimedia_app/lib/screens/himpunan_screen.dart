@@ -130,12 +130,6 @@ class HimpunanScreen extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   // Handle tap
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Tapped on ${item['title']}'),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
                                 },
                                 child: Row(
                                   children: [
