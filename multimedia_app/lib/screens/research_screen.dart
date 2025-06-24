@@ -1,5 +1,45 @@
 import 'package:flutter/material.dart';
 
+class CustomHeader extends StatelessWidget {
+  final String title;
+  const CustomHeader({Key? key, required this.title}) : super(key: key);
+
+  static const primaryColor = Color(0xFF0F2D52);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: primaryColor,
+      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(
+            'assets/images/logo_pens.png',
+            height: 48,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                'PROGRAM STUDI\nTEKNOLOGI MULTIMEDIA DAN BROADCASTING',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  height: 1.2,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ResearchScreen extends StatefulWidget {
   const ResearchScreen({Key? key}) : super(key: key);
 
@@ -90,60 +130,57 @@ class _ResearchScreenState extends State<ResearchScreen> {
     List<String> researchList = researchByYear[selectedYear] ?? [];
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0F2D52),
-        title: const Text(
-          'Penelitian',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Toggle Tahun
+          // Header sama dengan VisiMisiScreen
+          const CustomHeader(title: 'Penelitian'),
+          // Tahun horizontal scroll
           Container(
             color: const Color(0xFFF4F4F4),
             padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(years.length, (index) {
-                bool selected = index == selectedYearIndex;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedYearIndex = index;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: selected ? Colors.white : Colors.transparent,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          years[index],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: selected ? const Color(0xFFBDAF6A) : Colors.black,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(years.length, (index) {
+                  bool selected = index == selectedYearIndex;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedYearIndex = index;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: selected ? Colors.white : Colors.transparent,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            years[index],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: selected ? const Color(0xFFBDAF6A) : Colors.black,
+                            ),
                           ),
-                        ),
-                        if (selected)
-                          Container(
-                            margin: const EdgeInsets.only(top: 2),
-                            height: 2,
-                            width: 24,
-                            color: const Color(0xFFBDAF6A),
-                          ),
-                      ],
+                          if (selected)
+                            Container(
+                              margin: const EdgeInsets.only(top: 2),
+                              height: 2,
+                              width: 24,
+                              color: const Color(0xFFBDAF6A),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
           ),
           // List Penelitian

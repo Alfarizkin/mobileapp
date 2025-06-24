@@ -65,7 +65,12 @@ class _PrestasiScreenState extends State<PrestasiScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Prestasi Mahasiswa'),
+        title: const Text('Prestasi Mahasiswa', 
+            style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            ),
+          ),
         backgroundColor: const Color(0xFF0F2D52),
       ),
       body: Column(

@@ -14,7 +14,7 @@ class HimpunanScreen extends StatelessWidget {
       'title': 'Criativa',
     },
     {
-      'imagePath': 'assets/images/iradio.jpg',
+      'imagePath': 'assets/images/iRadio.jpg',
       'title': 'iRadio',
     },
     {

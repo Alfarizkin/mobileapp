@@ -34,7 +34,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       title: 'Kegiatan 5',
     ),
     GalleryItem(
-      imageUrl: 'assets/images/gallery6.jpg',
+      imageUrl: 'assets/images/gallery6.jpeg',
       title: 'Kegiatan 6',
     ),
     GalleryItem(
@@ -70,8 +70,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const primaryColor = Color(0xFF0F2D52);
+    const accentColor = Color(0xFF1E88E5);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         title: const Text(
           'Gallery MMB',
@@ -80,94 +83,281 @@ class _GalleryScreenState extends State<GalleryScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF0F2D52),
+        backgroundColor: primaryColor,
+        elevation: 0,
       ),
-      body: Column(
-        children: [
-          // Header dengan logo PENS
-          Container(
-            color: const Color(0xFF0F2D52),
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/images/logo_pens.png',
-                  height: 40,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            // Header Section
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      primaryColor,
+                      accentColor,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: primaryColor.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.photo_library_rounded,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Gallery Kegiatan',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'MMB Program',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Dokumentasi Aktivitas & Prestasi',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Gallery Grid
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.85,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final item = galleryItems[index];
+                    return _buildGalleryCard(
+                      item: item,
+                      index: index,
+                      onTap: () => _openImageZoomView(context, index),
+                    );
+                  },
+                  childCount: galleryItems.length,
+                ),
+              ),
+            ),
+            
+            // Bottom padding
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGalleryCard({
+    required GalleryItem item,
+    required int index,
+    required VoidCallback onTap,
+  }) {
+    const accentColor = Color(0xFF1E88E5);
+    
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image Section
+              Expanded(
+                flex: 3,
+                child: Hero(
+                  tag: 'gallery_${index}',
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          accentColor.withOpacity(0.1),
+                          accentColor.withOpacity(0.05),
+                        ],
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                          child: Image.asset(
+                            item.imageUrl,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[200],
+                                child: Icon(
+                                  Icons.image_not_supported,
+                                  color: Colors.grey[400],
+                                  size: 40,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        // Overlay gradient
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.3),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Zoom icon overlay
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Icons.zoom_in_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              
+              // Content Section
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'PROGRAM STUDI',
-                        style: TextStyle(
-                          color: Colors.white,
+                        item.title,
+                        style: const TextStyle(
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                          color: Color(0xFF2C3E50),
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
-                        'TEKNOLOGI MULTIMEDIA DAN BROADCASTING',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.visibility_rounded,
+                            size: 12,
+                            color: accentColor,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Lihat Detail',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: accentColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          
-          // Gallery MMB Title
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Gallery MMB',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F2D52),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          // Gallery Grid dengan scroll vertikal
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.2, // Sesuaikan dengan ratio yang dibutuhkan
-                ),
-                itemCount: galleryItems.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () => _openImageZoomView(context, index),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        galleryItems[index].imageUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -216,6 +406,24 @@ class _ImageZoomViewState extends State<ImageZoomView> {
           widget.galleryItems[_currentIndex].title,
           style: const TextStyle(color: Colors.white),
         ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              '${_currentIndex + 1}/${widget.galleryItems.length}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
       body: PhotoViewGallery.builder(
         scrollPhysics: const BouncingScrollPhysics(),
@@ -229,7 +437,9 @@ class _ImageZoomViewState extends State<ImageZoomView> {
         },
         itemCount: widget.galleryItems.length,
         loadingBuilder: (context, event) => const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
         ),
         pageController: _pageController,
         onPageChanged: (index) {
