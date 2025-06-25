@@ -32,10 +32,6 @@ _Aplikasi mobile redesign dari website resmi universitas_
 ## 🛠️ Teknologi
 
 - **Flutter** – Framework utama untuk pengembangan aplikasi mobile
-- **HTTP/Web Scraping / API** – Mengambil data dari website resmi kampus
-- **State Management** – Provider / GetX (jika digunakan)
 
 ---
-
-## 📦 Struktur Halaman
 
