@@ -15,7 +15,7 @@ _Aplikasi mobile redesign dari website resmi universitas_
 
 ---
 
-## 📸 Cuplikan Tampilan Aplikasi
+## 📸 Screenshot Tampilan Aplikasi
 
 | Fitur | Deskripsi | Tampilan |
 |------|-----------|----------|
