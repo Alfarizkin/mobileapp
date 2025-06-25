@@ -9,3 +9,5 @@ aplikasi mobile yang dikembangkan sebagai bagian dari tugas UTS. Aplikasi ini me
 
 - 🔍 Menampilkan informasi dari website kampus (berita, pengumuman, dsb)
 - 📱 Tampilan ulang dengan desain mobile-friendly
+
+![home_screen](https://github.com/user-attachments/assets/69dd6ae2-4568-4bef-a44e-f211cf73c97c)
