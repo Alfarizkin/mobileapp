@@ -46,3 +46,8 @@ _Aplikasi mobile redesign dari website resmi universitas_
 
 ---
 
+## Kontributor
+
+- **Alfarizki Nurachman** – Pengembang utama & satu-satunya kontributor proyek ini
+
+
